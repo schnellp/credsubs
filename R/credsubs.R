@@ -878,8 +878,8 @@ plot.sim.cred.band <- function(x, ...) {
        ylim=c(min(sim.cred.band$lower), max(sim.cred.band$upper)),
        xlab="Rank", ylab="Value",
        ...)
-  points(sim.cred.band$lower[o])
-  points(sim.cred.band$upper[o])
+  points(sim.cred.band$lower[o], ...)
+  points(sim.cred.band$upper[o], ...)
 }
 
 #' @export
