@@ -47,7 +47,7 @@ shinyServer(function(input, output) {
   output$status <- renderText({
     matches <- 1:nrow(cov.space)
     
-    for (predictor in names(input)) {
+    for (predictor in names(cov.space)) {
       if (is.factor(cov.space[, predictor])) {
         matches <-
           intersect(matches,
