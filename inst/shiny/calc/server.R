@@ -84,4 +84,8 @@ shinyServer(function(input, output) {
                "At higher credible levels, no conclusion may be drawn."))
     }
   })
+  
+  observeEvent(input$closeApp, {
+    stopApp()
+  })
 })

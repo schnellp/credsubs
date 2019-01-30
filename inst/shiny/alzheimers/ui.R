@@ -7,5 +7,7 @@ shinyUI(fluidPage(
   uiOutput("predictors"),
   
   h3("Result"),
-  htmlOutput("status")
+  htmlOutput("status"),
+  
+  actionButton("closeApp", "Close")
 ))
