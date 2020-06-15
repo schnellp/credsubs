@@ -144,10 +144,8 @@ sim.cred.band <- function(params,
     
     if (nonpar) {
       fx <- params[, i]
-      point.fx <- point.estimate[i]
     } else {
       fx <- FUN(design[i, , drop=FALSE], params)
-      point.fx <- FUN(design[i, , drop=FALSE], point.estimate)
     }
     
     if (i %in% track) {
@@ -162,6 +160,11 @@ sim.cred.band <- function(params,
         m[i] <- mean(fx)
         s[i] <- sd(fx)
       } else {
+        if (nonpar) {
+          point.fx <- point.estimate[i]
+        } else {
+          point.fx <- FUN(design[i, , drop=FALSE], point.estimate)
+        }
         m[i] <- point.fx
         s[i] <- sqrt(mean((fx - point.fx) ^ 2))
       }
@@ -636,10 +639,8 @@ credsubs.level <- function(params, design=NULL,
     
     if (nonpar) {
       fx <- params[, i]
-      point.fx <- point.estimate[i]
     } else {
       fx <- FUN(design[i, , drop=FALSE], params)
-      point.fx <- FUN(design[i, , drop=FALSE], point.estimate)
     }
     
     if (method == 'asymptotic') {
@@ -648,6 +649,11 @@ credsubs.level <- function(params, design=NULL,
         m[i] <- mean(fx)
         s[i] <- sd(fx)
       } else {
+        if (nonpar) {
+          point.fx <- point.estimate[i]
+        } else {
+          point.fx <- FUN(design[i, , drop=FALSE], point.estimate)
+        }
         m[i] <- point.fx
         s[i] <- sqrt(mean((fx - point.fx) ^ 2))
       }
