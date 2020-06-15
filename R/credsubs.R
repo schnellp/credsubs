@@ -37,6 +37,10 @@ to.Fx <- function(x) {
 #' surface. Default is \code{mean}.
 #' @param var.FUN The function used to quantify the variability of the
 #' regression surface posterior. Default is \code{sd}.
+#' @param point.estimate If not null, replaces the mean and sets the reference 
+#'                       around which the standard error is computed.
+#'                       Useful for bootstrapping methods.
+#'                       Treated as a row of the \code{params} matrix.
 #' @param track A numeric vector of indices indicating which rows (default none)
 #' of the design matrix should have the sample of the corresponding
 #' \code{FUN(x, params)} returned.
@@ -84,6 +88,7 @@ sim.cred.band <- function(params,
                           sides=c('both', 'upper', 'lower'),
                           est.FUN=mean,
                           var.FUN=sd,
+                          point.estimate=NULL,
                           track=numeric(0),
                           verbose=FALSE) {
   
@@ -151,8 +156,19 @@ sim.cred.band <- function(params,
     var[i] <- var.FUN(fx)
     
     if (method == 'asymptotic') {
-      m[i] <- mean(fx)
-      s[i] <- sd(fx)
+      if (is.null(point.estimate)) {
+        m[i] <- mean(fx)
+        s[i] <- sd(fx)
+      } else {
+        if (nonpar) {
+          point.fx <- point.estimate[i]
+        } else {
+          point.fx <- FUN(design[i, , drop=FALSE], point.estimate)
+        }
+        m[i] <- point.fx
+        s[i] <- sqrt(mean((fx - point.fx) ^ 2))
+      }
+      
       if (sides == "both") {
         z <- abs(fx - m[i]) / s[i]
       } else if (sides == "upper") {
@@ -269,6 +285,10 @@ sim.cred.band <- function(params,
 #'                surface. Default is \code{mean}.
 #' @param var.FUN The function used to quantify the variability of the
 #'                regression surface posterior. Default is \code{sd}.
+#' @param point.estimate If not null, replaces the mean and sets the reference 
+#'                       around which the standard error is computed.
+#'                       Useful for bootstrapping methods.
+#'                       Treated as a row of the \code{params} matrix.
 #' @param track A numeric vector of indices indicating which rows (default none)
 #'              of the design matrix should have the sample of the corresponding
 #'              \code{FUN(x, params)} returned.
@@ -322,6 +342,7 @@ credsubs <- function(params,
                      sides=c('both', 'exclusive', 'inclusive'),
                      est.FUN=mean,
                      var.FUN=sd,
+                     point.estimate=NULL,
                      track=numeric(0),
                      verbose=FALSE) {
   
@@ -401,6 +422,7 @@ credsubs <- function(params,
                                    sides=scb.sides,
                                    est.FUN=est.FUN,
                                    var.FUN=var.FUN,
+                                   point.estimate=point.estimate,
                                    track=scb.track,
                                    verbose=verbose)
     
@@ -482,6 +504,10 @@ credsubs <- function(params,
 #'                surface. Default is \code{mean}.
 #' @param var.FUN The function used to quantify the variability of the
 #'                regression surface posterior. Default is \code{sd}.
+#' @param point.estimate If not null, replaces the mean and sets the reference 
+#'                       around which the standard error is computed.
+#'                       Useful for bootstrapping methods.
+#'                       Treated as a row of the \code{params} matrix.
 #' @param track A numeric vector of indices indicating which rows (default none)
 #'              of the design matrix should have the sample of the corresponding
 #'              \code{FUN(x, params)} returned.
@@ -535,6 +561,7 @@ credsubs.level <- function(params, design=NULL,
                            sides=c('both', 'exclusive', 'inclusive'),
                            est.FUN=mean,
                            var.FUN=sd,
+                           point.estimate=NULL,
                            track=numeric(0),
                            verbose=FALSE,
                            z.store=c("ram", "recompute", "disk")) {
@@ -617,8 +644,20 @@ credsubs.level <- function(params, design=NULL,
     }
     
     if (method == 'asymptotic') {
-      m[i] <- mean(fx)
-      s[i] <- sd(fx)
+      
+      if (is.null(point.estimate)) {
+        m[i] <- mean(fx)
+        s[i] <- sd(fx)
+      } else {
+        if (nonpar) {
+          point.fx <- point.estimate[i]
+        } else {
+          point.fx <- FUN(design[i, , drop=FALSE], point.estimate)
+        }
+        m[i] <- point.fx
+        s[i] <- sqrt(mean((fx - point.fx) ^ 2))
+      }
+      
       est[i] <- m[i]
       if (sides == "both") {
         z <- abs(fx - m[i]) / s[i]
