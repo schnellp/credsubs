@@ -62,7 +62,6 @@ shinyServer(function(input, output) {
       }
       
     }
-    print(matches)
     
     if (length(matches) == 0) {
       return("Predictor combination untested.")
