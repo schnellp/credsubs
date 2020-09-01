@@ -1,0 +1,19 @@
+bibentry(bibtype = "Article",
+  title        = "{credsubs}: Multiplicity-Adjusted Subset Identification",
+  author       = c(person(given = c("Patrick", "M."),
+                          family = "Schnell",
+                          email = "schnell.31@osu.edu"),
+                   person(given = "Mark",
+                          family = "Fiecas"),
+                   person(given = c("Bradley", "P."),
+                          family = "Carlin")),
+  journal      = "Journal of Statistical Software",
+  year         = "2020",
+  volume       = "94",
+  number       = "7",
+  pages        = "1--22",
+  doi          = "10.18637/jss.v094.i07",
+
+  header       = "To cite credsubs in publications use:"
+)
+
